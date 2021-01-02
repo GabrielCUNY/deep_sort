@@ -146,16 +146,21 @@ def generate_detections(encoder, mot_dir, output_dir, detection_dir=None):
                 "Failed to created output directory '%s'" % output_dir)
 
     for sequence in os.listdir(mot_dir):
+        if sequence == '.DS_Store' or sequence == 'img1':
+            continue
+
         print("Processing %s" % sequence)
         sequence_dir = os.path.join(mot_dir, sequence)
 
         image_dir = os.path.join(sequence_dir, "img1")
-        image_filenames = {
-            int(os.path.splitext(f)[0]): os.path.join(image_dir, f)
-            for f in os.listdir(image_dir)}
+        image_filenames = {}
+        for f in os.listdir(image_dir):
+            if f != 'det.txt' and f != '.DS_Store':
+                image_filenames[int(os.path.splitext(f)[0])] = os.path.join(image_dir, f)
+
 
         detection_file = os.path.join(
-            detection_dir, sequence, "det/det.txt")
+            detection_dir, sequence, "det.txt")
         detections_in = np.loadtxt(detection_file, delimiter=',')
         detections_out = []
 
