@@ -43,7 +43,6 @@ if __name__ == "__main__":
         sequence = os.path.splitext(sequence_txt)[0]
         sequence_dir = os.path.join(args.mot_dir, sequence)
         if not os.path.exists(sequence_dir):
-            print("rien ici")
             continue
         result_file = os.path.join(args.result_dir, sequence_txt)
         update_ms = args.update_ms
@@ -57,12 +56,10 @@ if __name__ == "__main__":
         import sys
         sys.exit()
     for sequence_txt in os.listdir(args.result_dir):
-        print("coucou")
         sequence = os.path.splitext(sequence_txt)[0]
         sequence_dir = os.path.join(args.mot_dir, sequence)
         if not os.path.exists(sequence_dir):
             continue
-        print("mmh mmmh")
         filename_in = os.path.join(args.output_dir, "%s.avi" % sequence)
         filename_out = os.path.join(args.output_dir, "%s.mp4" % sequence)
         convert(filename_in, filename_out)
