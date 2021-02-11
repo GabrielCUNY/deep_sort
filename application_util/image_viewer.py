@@ -271,11 +271,10 @@ class ImageViewer(object):
             parameters.
 
         """
-        fourcc = cv2.VideoWriter_fourcc(*fourcc_string)
+        #fourcc = cv2.VideoWriter_fourcc(*fourcc_string)
         if fps is None:
             fps = int(1000. / self._update_ms)
-        self._video_writer = cv2.VideoWriter(
-            output_filename, fourcc, fps, self._window_shape)
+        self._video_writer = cv2.VideoWriter('/resultat_deep_sort/video_out.avi',cv2.VideoWriter_fourcc(*'DIVX'), fps, self._window_shape)
 
     def disable_videowriter(self):
         """ Disable writing videos.
@@ -299,6 +298,7 @@ class ImageViewer(object):
 
         self._terminate, is_paused = False, False
         # print("ImageViewer is paused, press space to start.")
+        out = cv2.VideoWriter('video_out.avi',cv2.VideoWriter_fourcc(*'DIVX'), 25, self._window_shape)
         while not self._terminate:
             t0 = time.time()
             if not is_paused:
@@ -311,6 +311,9 @@ class ImageViewer(object):
             cv2.imshow(
                 self._caption, cv2.resize(self.image, self._window_shape[:2]))
             key = cv2.waitKey(remaining_time)
+
+            out.write(cv2.resize(self.image, self._window_shape))
+
             if key & 255 == 27:  # ESC
                 print("terminating")
                 self._terminate = True
@@ -321,7 +324,8 @@ class ImageViewer(object):
                 print("stepping")
                 self._terminate = not self._user_fun()
                 is_paused = True
-
+        out.release()
+        print("video result is store in current repo as  video_out.avi")
         # Due to a bug in OpenCV we must call imshow after destroying the
         # window. This will make the window appear again as soon as waitKey
         # is called.

@@ -164,6 +164,7 @@ def run(sequence_dir, detection_file, output_file, min_confidence,
         "cosine", max_cosine_distance, nn_budget)
     tracker = Tracker(metric)
     results = []
+    #video_output = []
 
     def frame_callback(vis, frame_idx):
         print("Processing frame %05d" % frame_idx)
@@ -191,6 +192,8 @@ def run(sequence_dir, detection_file, output_file, min_confidence,
             vis.set_image(image.copy())
             vis.draw_detections(detections)
             vis.draw_trackers(tracker.tracks)
+            #video_output.append(image)
+        
 
         # Store results.
         for track in tracker.tracks:
@@ -207,7 +210,10 @@ def run(sequence_dir, detection_file, output_file, min_confidence,
         visualizer = visualization.NoVisualization(seq_info)
     visualizer.run(frame_callback)
 
+
     # Store results.
+    
+
     f = open(output_file, 'w')
     for row in results:
         print('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1' % (
